@@ -38,17 +38,13 @@ app.get('/pokemons/:id', async (req, res) => {
   }
 });
 
-//Recherche de Pokémon par Nom
+//Recherche de Pokémon par Nom (français)
 app.get('/pokemons/recherche/:name', async (req, res) => {
   try {
     const pokeName = req.params.name;
-    const poke = await pokemon.findOne({ "name.french": { $regex: new RegExp(pokeName, "i") } 
-    });
-    if (poke) {
-      res.json(poke);
-    } else {
-      res.status(404).json({ error: 'Pokemon not found' });
-    }
+    const pokes = await pokemon.find({ "name.french": { $regex: new RegExp(pokeName, "i") } 
+    }).limit(20);
+    res.json(pokes);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
